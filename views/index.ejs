@@ -9,18 +9,14 @@
     <link rel="stylesheet" href="./css/style.css" />
     <script src="https://cdn.tailwindcss.com"></script>
     <script>
-      var token = document
-        .querySelector('meta[name="csrf-token"]')
-        .getAttribute("content");
+      var token = document.querySelector('meta[name="csrf-token"]').getAttribute("content");
       function updateTodo(id) {
-        var boolean = document.querySelector(`#todo-checkbox-${id}`).checked;
-        fetch(`/todos/${id}`, {
-          method: "PUT",
+        fetch(`/todos/${id}/markAsCompleted`, {
+          method: "put",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify({
-            completed: boolean,
-            _csrf: token,
-          }),
+            "_csrf": token
+          })
         })
           .then((res) => {
             if (res.ok) {
@@ -31,11 +27,11 @@
       }
       function deleteTodo(id) {
         fetch(`/todos/${id}`, {
-          method: "DELETE",
+          method: "delete",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify({
-            _csrf: token,
-          }),
+            "_csrf": token
+          })
         })
           .then((res) => {
             if (res.ok) {
@@ -83,8 +79,7 @@
         <div>
           <%- include('todos.ejs', { title: "Overdue", data: overdue }) %> <%-
           include('todos.ejs', { title: "Due Today", data: dueToday }) %> <%-
-          include('todos.ejs', { title: "Due Later", data: dueLater }) %> <%-
-          include('todos.ejs', { title: "Completed", data: completedItems }) %>
+          include('todos.ejs', { title: "Due Later", data: dueLater }) %>
         </div>
       </div>
     </div>
